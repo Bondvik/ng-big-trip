@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Big Trip</title>
+  </head>
+
+  <body class="page-body">
+    <header class="page-header">
+      <div class="page-body__container  page-header__container">
+        <img class="page-header__logo" src="../assets/img/logo.png" width="42" height="42" alt="Trip logo">
+        <div class="trip-main">
+          <section class="trip-main__trip-info  trip-info">
+            <app-trip-info #refInfoTrip></app-trip-info>
+          </section>
+          <div class="trip-main__trip-controls  trip-controls">
+            <div class="trip-controls__navigation">
+              <div class="trip-controls__navigation">
+                <h2 class="visually-hidden">Switch trip view</h2>
+                <app-page-navigation (checkedItemMenu)="checkedItemMenu($event)"></app-page-navigation>
+              </div>
+            </div>
+            <div class="trip-controls__filters">
+              <h2 class="visually-hidden">Filter events</h2>
+              <app-list-filter (checkedFilter)="checkedFilter($event)"></app-list-filter>
+            </div>
+          </div>
+          <app-add-new-point (addNewEvent)="onAddNewEvent($event)" [isDisabledButton]="isDisabledButton"></app-add-new-point>
+        </div>
+      </div>
+    </header>
+    <main class="page-body__page-main  page-main">
+      <div class="page-body__container">
+        <section class="trip-events">
+          <h2 class="visually-hidden">Trip events</h2>
+          <ng-container *ngIf="clickItem === 'TABLE' || mode === 'ADD' || isTable; else stastsRef">
+            <app-list-sort (checkedSort)="checkedSort($event)" #sortList></app-list-sort>
+            <app-new-point [mode]="mode" (saveNewPoint)="saveNewPoint($event)" *ngIf="mode === 'ADD'"></app-new-point>
+            <app-list #listPoints (changedDestination)="changeDestination($event)" (isCheckedType)="isCheckedType($event)"></app-list>
+          </ng-container>
+          <ng-template #stastsRef>
+            <app-stats></app-stats>
+          </ng-template>
+        </section>
+      </div>
+    </main>
+    <script src="node_modules/chart.js/src/chart.js"></script>
+  </body>
+</html>

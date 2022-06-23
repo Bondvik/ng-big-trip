@@ -1,0 +1,9 @@
+<nav class="trip-controls__trip-tabs  trip-tabs">
+  <ng-container *ngFor="let item of menuItems">
+    <a
+      class="trip-tabs__btn" href="#"
+      (click)="onClickItemMenu($event)"
+    >{{ item | titlecase }}</a>
+  </ng-container>
+
+</nav>

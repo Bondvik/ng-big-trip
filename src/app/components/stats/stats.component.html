@@ -1,0 +1,48 @@
+<section class="statistics">
+  <h2 class="visually-hidden">Trip statistics</h2>
+  <div class="statistics__item statistics__item--money">
+    <canvas
+      class="statistics__chart  statistics__chart--money" width="900"
+      baseChart
+      [datasets]="setMoneyBarChartData()"
+      [labels]="dataTypesByTotalPrice"
+      [options]="setBarChartOptions('MONEY')"
+      [legend]="barChartLegend"
+      [plugins]="barChartPlugins"
+    ></canvas>
+  </div>
+  <div class="statistics__item statistics__item--transport">
+    <canvas
+      class="statistics__chart  statistics__chart--transport" width="900"
+      baseChart
+      [datasets]="setTypeBarChartData()"
+      [labels]="dataLablesByType"
+      [options]="setBarChartOptions('TYPE')"
+      [legend]="barChartLegend"
+      [plugins]="barChartPlugins"
+    ></canvas>
+  </div>
+
+  <!-- <div>
+    <div style="display: block">
+      <canvas baseChart
+              [datasets]="barChartData"
+              [labels]="barChartLabels"
+              [options]="barChartOptions"
+              [legend]="barChartLegend"
+      >
+      </canvas>
+    </div>
+  </div>
+    <div>
+    <div style="display: block">
+      <canvas baseChart
+              [datasets]="barChartData"
+              [labels]="barChartLabels"
+              [options]="barChartOptions"
+              [legend]="barChartLegend"
+      >
+      </canvas>
+    </div>
+  </div> -->
+</section>

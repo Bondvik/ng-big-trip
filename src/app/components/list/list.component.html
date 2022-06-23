@@ -1,0 +1,10 @@
+<ul class="trip-events__list" *ngIf="points.length">
+  <app-point
+    *ngFor="let point of points" [point]="point"
+    (updateList)="updateList()"
+    (changedDestination)="changeDestination($event)"
+    (editPointId)="editPoint($event)"
+    #listChild
+  >
+  </app-point>
+</ul>

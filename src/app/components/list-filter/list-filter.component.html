@@ -1,0 +1,18 @@
+<form class="trip-filters" action="#" method="get">
+  <div class="trip-filters__filter" *ngFor="let filter of filters">
+    <input
+      id="filter-{{ filter }}"
+      class="trip-filters__filter-input  visually-hidden"
+      type="radio"
+      name="trip-filter"
+      value="{{ filter }}"
+      [checked]="isCheckedFilter"
+      (change)="changedFilter($event)"
+    >
+    <label
+      class="trip-filters__filter-label"
+      for="filter-{{ filter }}"
+    >{{ filter | uppercase }}</label>
+  </div>
+  <button class="visually-hidden" type="submit">Accept filter</button>
+</form>

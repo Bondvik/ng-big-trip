@@ -1,0 +1,15 @@
+<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+  <div class="trip-sort__item  trip-sort__item--{{ type }}" *ngFor="let type of sortTypes">
+    <input
+      id="sort-{{ type }}"
+      class="trip-sort__input  visually-hidden"
+      type="radio"
+      name="trip-sort"
+      value="sort-{{ type }}"
+      (click)="changedSort(type)"
+      [disabled]="type === 'event' || type === 'offers'"
+      [checked]="type === currentType"
+    >
+    <label class="trip-sort__btn" for="sort-{{ type }}">{{ type | titlecase }}</label>
+  </div>
+</form>

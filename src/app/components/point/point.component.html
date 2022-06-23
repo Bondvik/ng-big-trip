@@ -1,0 +1,173 @@
+<li class="trip-events__item">
+  <div class="event" *ngIf="mode === 'DEFAULT'">
+    <time class="event__date" datetime="2019-03-18">{{ point.date_from | date: 'MMM d' | uppercase }}</time>
+    <div class="event__type">
+      <img class="event__type-icon" width="42" height="42" src="../assets/img/icons/{{ point.type }}.png" alt="Event type icon">
+    </div>
+    <h3 class="event__title">{{ point.type | titlecase }} {{ point.destination.name | titlecase }}</h3>
+    <div class="event__schedule">
+      <p class="event__time">
+        <time class="event__start-time" datetime="2019-03-18T12:25">{{ point.date_from | date: 'h:mm' }}</time>
+        &mdash;
+        <time class="event__end-time" datetime="2019-03-18T13:35">{{ point.date_to | date: 'h:mm' }}</time>
+      </p>
+      <p class="event__duration">{{ getDuration(point.date_from, point.date_to ) }}</p>
+    </div>
+    <p class="event__price">
+      &euro;&nbsp;<span class="event__price-value">{{ point.base_price }}</span>
+    </p>
+    <h4 class="visually-hidden">Offers:</h4>
+    <ul class="event__selected-offers" *ngIf="point.offers.length > 0">
+      <li class="event__offer" *ngFor="let offer of point.offers">
+        <span class="event__offer-title">{{ offer.title }}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">{{ offer.price }}</span>
+      </li>
+    </ul>
+    <button class="event__favorite-btn" [class.event__favorite-btn--active]="point.is_favorite" (click)="setFavoriteClickHandler(point)" type="button">
+      <span class="visually-hidden">Add to favorite</span>
+      <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+        <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
+      </svg>
+    </button>
+    <button class="event__rollup-btn" (click)="openEventClickHandler(point.id)" type="button">
+      <span class="visually-hidden">Open event</span>
+    </button>
+  </div>
+</li>
+
+<!-- Edit -->
+<form class="event event--edit" action="#" method="post" *ngIf="mode === 'EDITING'" [formGroup]="form" (ngSubmit)="submitHandler(point)">
+  <header class="event__header">
+    <div class="event__type-wrapper">
+      <label class="event__type  event__type-btn" for="event-type-toggle-1">
+        <span class="visually-hidden">Choose event type</span>
+        <img class="event__type-icon" width="17" height="17" src="../assets/img/icons/{{ type }}.png" alt="Event type icon">
+      </label>
+      <input
+        class="event__type-toggle  visually-hidden"
+        id="event-type-toggle-1"
+        type="checkbox"
+        [(ngModel)]="eventTypeToggle"
+        [ngModelOptions]="{standalone: true}"
+      >
+
+      <div class="event__type-list">
+        <fieldset class="event__type-group">
+          <legend class="visually-hidden">Event type</legend>
+          <ng-container *ngFor="let item of types; let idx = index">
+            <div class="event__type-item">
+              <input
+                id="event-type-{{ item.type}}-{{idx}}"
+                class="event__type-input  visually-hidden"
+                type="radio"
+                name="event-type"
+                value="{{ item.type}}"
+                [checked]="item.type === point.type"
+                (change)="onChangedTypeHandler(item.type)"
+              >
+              <label
+                class="event__type-label  event__type-label--{{ item.type}}"
+                for="event-type-{{ item.type}}-{{ idx }}">{{ item.type | titlecase }}
+              </label>
+            </div>
+          </ng-container>
+        </fieldset>
+      </div>
+    </div>
+
+    <div class="event__field-group  event__field-group--destination">
+      <label class="event__label  event__type-output" for="event-destination-1">
+        {{ type | titlecase }}
+      </label>
+      <input
+        class="event__input  event__input--destination"
+        id="event-destination-1"
+        type="text"
+        name="event-destination"
+        value="{{ point.destination.name}}"
+        list="destination-list-1"
+        formControlName="destination"
+        (change)="onChangedDestination($event)"
+      >
+      <datalist id="destination-list-1">
+        <option *ngFor="let destination of destinations" value="{{ destination.name }}"></option>
+      </datalist>
+    </div>
+
+    <div class="event__field-group  event__field-group--time">
+      <label class="visually-hidden" for="event-start-time-1">From</label>
+      <p-calendar
+        [showTime]="true"
+        inputId="time"
+        formControlName="startDateEvent"
+        dateFormat="dd/mm/yy"
+        (onSelect)="onSelectStartDateEvent($event)"
+      >
+    </p-calendar>
+      &mdash;
+      <label class="visually-hidden" for="event-end-time-1">To</label>
+      <p-calendar
+        [showTime]="true"
+        inputId="time"
+        formControlName="endDateEvent"
+        dateFormat="dd/mm/yy"
+        (onSelect)="onSelectEndDateEvent($event)"
+      >
+      </p-calendar>
+    </div>
+
+    <div class="event__field-group  event__field-group--price">
+      <label class="event__label" for="event-price-1">
+        <span class="visually-hidden">Price</span>
+        &euro;
+      </label>
+      <input
+        class="event__input  event__input--price"
+        id="event-price-1"
+        type="text"
+        name="event-price"
+        value="160"
+        formControlName="price"
+        (change)="onChangedPrice($event)"
+      >
+    </div>
+
+    <button class="event__save-btn  btn  btn--blue" type="submit" [disabled]="form.invalid">Save</button>
+    <button class="event__reset-btn" type="reset" (click)="deletePoint(point.id)">Delete</button>
+    <button class="event__rollup-btn" type="button" (click)="closeEditCard()">
+      <span class="visually-hidden">Open event</span>
+    </button>
+  </header>
+    <p-message severity="error" text="Выберите город" *ngIf="form.get('destination')?.invalid && form.get('destination')?.touched"></p-message>
+    <p-message severity="error" text="Заполните стоимость поездки" *ngIf="form.get('price')?.invalid && form.get('price')?.touched"></p-message>
+    <p-message severity="error" text="Дата старта поездки не должна превышать дату окончания поездки" *ngIf="form.get('startDateEvent')?.invalid && form.get('startDateEvent')?.touched"></p-message>
+    <p-message severity="error" text="Дата окончания поездки не должна быть меньше даты старта поездки" *ngIf="form.get('endDateEvent')?.invalid && form.get('endDateEvent')?.touched"></p-message>
+  <section class="event__details">
+    <section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+        <div class="event__offer-selector" *ngFor="let offer of offersByEventType; let idx = index">
+          <input
+            class="event__offer-checkbox  visually-hidden"
+            id="event-offer-{{ offer.title }}-{{ idx }}"
+            type="checkbox"
+            name="event-offer-{{ offer.title }}"
+            [checked]="offer.isChecked"
+            (change)="onChangedOffer(offer)"
+          >
+            <label class="event__offer-label" for="event-offer-{{ offer.title }}-{{ idx }}">
+              <span class="event__offer-title">{{ offer.title }}</span>
+              &plus;&euro;&nbsp;
+              <span class="event__offer-price">{{ offer.price }}</span>
+            </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">{{ description }}</p>
+    </section>
+  </section>
+</form>
