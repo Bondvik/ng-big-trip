@@ -20,7 +20,7 @@ export class NewPointComponent implements OnInit {
   type = 'bus';
   types: IOffers[] = [];
   eventTypeToggle = false;
-  city = 'Geneva';
+  city = 'Oslo';
   destinations: IDestination[]  = [];
   description = '';
   name = '';

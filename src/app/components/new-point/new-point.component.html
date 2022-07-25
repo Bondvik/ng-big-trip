@@ -49,6 +49,7 @@
         value="Geneva"
         list="destination-list-1"
         formControlName="destination"
+        [(ngModel)]="city"
         (change)="onChangedDestination($event)"
       >
       <datalist id="destination-list-1">

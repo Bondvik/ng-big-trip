@@ -1,7 +1,6 @@
 import { AbstractControl, FormControl } from "@angular/forms";
 
 export class MyValidators {
-
   static restrictedPrice(control: FormControl): {[key: string]: boolean} | null {
     if (control.value <= 0) {
       return {
